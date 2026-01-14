@@ -19,7 +19,6 @@ function AdminRegister() {
   const handleRegister = (e) => {
     e.preventDefault();
 
-    // Save admin data locally (frontend only)
     localStorage.setItem("admin", JSON.stringify(form));
 
     alert("Admin Registered Successfully!");
