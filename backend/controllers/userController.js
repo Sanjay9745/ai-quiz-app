@@ -20,6 +20,9 @@ const login = async (req, res) => {
         if (!user) {
             return res.status(401).json({ success: false, message: 'Invalid credentials' });
         }
+        if(user.role !== 'teacher'){
+            return res.status(403).json({ success: false, message: 'Access denied. Not a teacher.' });
+        }
         const token = jwt.sign({ id: user._id, role: user.role }, process.env.SECRET_KEY, { expiresIn: '1h' });
         res.status(200).json({ success: true, token });
     }
