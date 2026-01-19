@@ -1,9 +1,10 @@
-const {createUser,signinUser} =  require('../helpers/userHelper');
+const {createUser,signinUser} =  require('../helpers/teacherHelper');
 
 const jwt = require('jsonwebtoken');
  const register = async (req, res) => {
     try {
-        const { username, email, passwordHash, role } = req.body;
+        
+        const { username, email, passwordHash, role = "teacher" } = req.body;
         const newUser = { username, email, passwordHash, role };
         const createdUser = await createUser(newUser);
         
