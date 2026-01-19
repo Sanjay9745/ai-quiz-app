@@ -8,7 +8,7 @@ const cors = require('cors');
 
 require('./db');
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/teacher');
+var teacherRouter = require('./routes/teacher');
 
 var app = express();
 
@@ -25,7 +25,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/teacher', teacherRouter);
 app.use('/students', require('./routes/stud-route'));
 
 // catch 404 and forward to error handler
