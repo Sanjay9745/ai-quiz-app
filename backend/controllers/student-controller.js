@@ -1,7 +1,7 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.secretKey
-const {authenticateStudent,createStudent} = require('../stud-db-helper/stud');
+const {authenticateStudent,createStudent} = require('../helpers/student-helper');
 
 
 
