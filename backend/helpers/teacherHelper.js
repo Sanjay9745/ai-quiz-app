@@ -11,7 +11,7 @@ exports.createUser = async function(newUser) {
 };
 exports.signinUser = async function(username, password) {
     try {
-        const user = await User.findOne({ username, passwordHash: password });
+        const user = await User.findOne({ username, password });
         return user;
     } catch (error) {
         throw error;
