@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { loginTeacher } from "../api/teacher";
 
 export default function TeacherLogin() {
   const [form, setForm] = useState({ username: "", password: "" });
@@ -8,15 +9,13 @@ export default function TeacherLogin() {
     e.preventDefault();
     setError("");
     try {
-      const res = await fetch("/api/auth/teacher/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Login failed");
-      localStorage.setItem("token", data.token);
-      window.location.href = "/teacher/dashboard";
+      const logindata = { username: form.username, password: form.password };
+      loginTeacher(logindata)
+        .then((data) => {
+          console.log("Login successful:", data);
+          localStorage.setItem("token", data.token);
+          window.location.href = "/teacher/dashboard";
+        });   
     } catch (err) {
       setError(err.message);
     }

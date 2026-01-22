@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { registerTeacher } from "../api/teacher";
 
 export default function TeacherRegister() {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
@@ -7,19 +8,28 @@ export default function TeacherRegister() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    try {
-      const res = await fetch("/api/auth/teacher/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Registration failed");
-      alert("Registration successful! Please login.");
+    // Handle registration logic here
+    const userData = { username: form.username, email: form.email, password: form.password };
+        registerTeacher(userData)
+          .then((data) => {
+            console.log("Registration successful:", data);               
+          
+            // Redirect to login or dashboard page
+            window.location.href = "/teacher/login";
+          })
+          .catch((error) => {
+            setError(error.message);
+            console.error("Registration failed:", error);
+          });
+  /*   try {
+      const data = await registerTeacher(form);
+      console.log("Registration successful:", data);
+      // Redirect to login or dashboard page
       window.location.href = "/login";
     } catch (err) {
       setError(err.message);
-    }
+      console.log("Registration failed:", err);
+    } */
   };
 
   return (
