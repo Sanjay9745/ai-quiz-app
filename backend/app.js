@@ -9,12 +9,12 @@ const cors = require("cors");
 require("./db");
 var indexRouter = require("./routes/index");
 var teacherRouter = require("./routes/teacher");
-var usersRouter = require('./routes/users');
+var usersRouter = require('./routes/stud-route');
 var adminRouter = require("./routes/admin");
 
 var app = express();
 
-app.use(cors());
+app.use(cors('*'));
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

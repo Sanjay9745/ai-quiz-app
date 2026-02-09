@@ -8,9 +8,9 @@ exports.register = async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({
-      username,
-      email,
-      password: hashedPassword,
+      username: username,
+      email: email,
+      passwordHash: hashedPassword,
       role: "admin",
     });
     await user.save();
@@ -27,17 +27,17 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email, role: "admin" });
     if (!user) {
       return res
         .status(400)
         .json({ success: false, message: "Invalid credentials" });
     }
 
-    console.log("REQ PASSWORD:", password);
-    console.log("DB PASSWORD:", user.password);
+    // console.log("REQ PASSWORD:", password);
+    // console.log("DB PASSWORD:", user.password);
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.passwordHash);
     if (!isMatch) {
       return res
         .status(400)
@@ -46,7 +46,7 @@ exports.login = async (req, res) => {
 
     const token = jwt.sign(
       { userId: user._id, role: user.role },
-      process.env.JWT_SECRET_KEY,
+      process.env.SECRET_KEY,
       { expiresIn: "1h" },
     );
     res.json({ success: true, token, message: "Login successful" });

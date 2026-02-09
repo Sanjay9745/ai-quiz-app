@@ -1,7 +1,7 @@
 const jsonwebtoken = require('jsonwebtoken');
 
 const User = require('../db/User');
-const secretKey = process.env.JWT_SECRET || 'your_secret_key';
+const secretKey = process.env.SECRET_KEY|| 'your_secret_key';
 
 async function authMiddleware(req, res, next) {
     const authHeader = req.headers['x-access-token'];

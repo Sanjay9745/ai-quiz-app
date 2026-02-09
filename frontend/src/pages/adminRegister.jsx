@@ -1,36 +1,33 @@
 
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
+import api from "../api";
 
 function AdminRegister() {
-  const navigate = useNavigate();
+  const Navigate = useNavigate();
+  const [form, setForm] = useState({ username: "", email: "", password: "" });
+  const [msg, setMsg] = useState("");
 
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: ""
-  });
-
-  const handleChange = (e) => {
+  const handleChange = e =>
     setForm({ ...form, [e.target.name]: e.target.value });
-  };
 
-  const handleRegister = (e) => {
+  const handleRegister = async e => {
     e.preventDefault();
-
-    localStorage.setItem("admin", JSON.stringify(form));
-
-    alert("Admin Registered Successfully!");
-    navigate("/");
+    try {
+      await api.post("/register", form);
+    
+    } catch (err) {
+      setMsg(err.response.data.message);
+    }
+    Navigate("/admin/login");
   };
-
   return (
     <div style={styles.container}>
       <form style={styles.form} onSubmit={handleRegister}>
         <h2>Admin Register</h2>
 
-        <input name="name" placeholder="Name" onChange={handleChange} required style={styles.input}/>
+        <input name="username" placeholder="username" onChange={handleChange} required style={styles.input}/>
         <input name="email" type="email" placeholder="Email" onChange={handleChange} required style={styles.input}/>
         <input name="password" type="password" placeholder="Password" onChange={handleChange} required style={styles.input}/>
 
