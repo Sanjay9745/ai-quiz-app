@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import api from "../api";
 
 function AdminLogin() {
   const navigate = useNavigate();
@@ -10,21 +11,36 @@ function AdminLogin() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleLogin = (e) => {
+  const handleLogin = async(e) => {
     e.preventDefault();
 
-    const savedAdmin = JSON.parse(localStorage.getItem("admin"));
-
-    if (!savedAdmin) {
-      setError("No admin registered");
+    if (!email || !password) {
+      setError("Please fill in all fields");
       return;
     }
 
-    if (email === savedAdmin.email && password === savedAdmin.password) {
-      navigate("/dashboard");
-    } else {
-      setError("Invalid credentials");
-    }
+    
+
+      try {
+         const response = await api.post("/login", { email, password });
+         const { token } = response.data;
+         if (!token) {
+           setError("Invalid login response");
+           return;
+         }
+      
+
+
+         localStorage.setItem("adminToken", token);
+
+          alert("Login successful");
+         
+         navigate("/admin/dashboard");
+      } catch (error) {
+        setError(error.response.data.message);
+        return; 
+      }
+    
   };
 
   return (
@@ -39,7 +55,7 @@ function AdminLogin() {
 
         <button style={styles.button}>Login</button>
 
-        <p>New admin? <Link to="/register">Register here</Link></p>
+        <p>New admin? <Link to="/admin/register">Register here</Link></p>
       </form>
     </div>
   );

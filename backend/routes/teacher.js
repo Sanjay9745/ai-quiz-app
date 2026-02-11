@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+const bcrypt = require('bcryptjs');
+=======
 const bcrypt = require('bcrypt');
+>>>>>>> a3105e1f3589d3e2221c462371715a7577d7bdd0
 const User = require('../db/User');
 
 
