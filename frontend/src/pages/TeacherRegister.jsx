@@ -1,14 +1,14 @@
 import { useState } from "react";
 
 export default function TeacherRegister() {
-  const [form, setForm] = useState({ username: "", email: "", password: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     try {
-      const res = await fetch("/api/auth/teacher/register", {
+      const res = await fetch("http://localhost:3000/teacher/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -29,9 +29,9 @@ export default function TeacherRegister() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
-            placeholder="Username"
-            value={form.username}
-            onChange={(e) => setForm({ ...form, username: e.target.value })}
+            placeholder="name"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
             className="w-full px-3 py-2 rounded-lg bg-slate-700 text-white outline-none focus:ring-2 focus:ring-blue-500"
             required
           />

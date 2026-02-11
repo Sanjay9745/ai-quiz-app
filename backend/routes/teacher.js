@@ -1,16 +1,12 @@
+const express = require('express');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
+const router = express.Router();
 
 
-var express = require('express');
-var router = express.Router();
-
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
-
+// ================= REGISTER TEACHER =================
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -22,23 +18,51 @@ router.post('/register', async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newStudent = new User({
+    const teacher = new User({
       name,
       email,
       password: hashedPassword,
-      role: 'student'
+      role: 'teacher'
     });
 
-    await newStudent.save();
+    await teacher.save();
 
-    res.status(201).json({
-      message: 'Student registered successfully'
-    });
+    res.status(201).json({ message: 'Teacher registered successfully' });
 
   } catch (error) {
+    console.error("TEACHER REGISTER ERROR:", error);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
+
+// ================= LOGIN TEACHER =================
+router.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const teacher = await User.findOne({ email, role: 'teacher' });
+    if (!teacher) {
+      return res.status(400).json({ message: 'Teacher not found' });
+    }
+
+    const isMatch = await bcrypt.compare(password, teacher.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    const token = jwt.sign(
+      { id: teacher._id, role: teacher.role },
+      process.env.SECRET_KEY, // matches your .env
+      { expiresIn: '1d' }
+    );
+
+    res.json({ token, message: 'Login successful' });
+
+  } catch (error) {
+    console.error("TEACHER LOGIN ERROR:", error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 module.exports = router;

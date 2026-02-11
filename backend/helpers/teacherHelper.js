@@ -1,4 +1,6 @@
 const User = require('../db/User');
+const bcrypt = require("bcrypt");
+
 
 exports.createUser = async function(newUser) {
     try {
@@ -9,11 +11,13 @@ exports.createUser = async function(newUser) {
         throw error;
     }
 };
-exports.signinUser = async function(username, password) {
-    try {
-        const user = await User.findOne({ username, password });
-        return user;
-    } catch (error) {
-        throw error;
-    }       
+exports.signinUser = async (email, password) => {
+  const teacher = await User.findOne({ email, role: "teacher" });
+
+  if (!teacher) throw new Error("Teacher not found");
+
+  const match = await bcrypt.compare(password, teacher.password);
+  if (!match) throw new Error("Invalid password");
+
+  return teacher;
 };

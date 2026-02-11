@@ -1,4 +1,6 @@
 const User = require('../db/User');
+const bcrypt = require("bcrypt");
+
 
 exports.createStudent = async (studentData) => {
     try {
@@ -12,15 +14,13 @@ exports.createStudent = async (studentData) => {
     }
 };
 
-exports.authenticateStudent = async (username,email, password) => {
-    try {
-        const student = await User.findOne({ username,email,password,role:'student' });
-        if (!student) {
-            throw new Error('Authentication failed: Invalid email or password');
-        }
-        return student;
-    } catch (error) {
-        throw new Error('Error during authentication: ' + error.message);
-    }       
+exports.authenticateStudent = async (email, password) => {
+  const student = await User.findOne({ email, role: "student" });
 
+  if (!student) throw new Error("Student not found");
+
+  const match = await bcrypt.compare(password, student.password);
+  if (!match) throw new Error("Invalid password");
+
+  return student;
 };

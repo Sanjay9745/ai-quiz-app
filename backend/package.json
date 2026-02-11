@@ -7,8 +7,10 @@
     "dev": "nodemon ./bin/www"
   },
   "dependencies": {
-    "axios": "^1.13.2",
+    "@google/generative-ai": "^0.24.1",
+    "axios": "^1.13.5",
     "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.6",
     "debug": "~2.6.9",
@@ -18,8 +20,7 @@
     "jade": "~1.11.0",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.1.5",
-    "morgan": "~1.9.1",
-    "start": "node server.js"
+    "morgan": "~1.9.1"
   },
   "description": "",
   "main": "app.js",

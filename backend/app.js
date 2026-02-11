@@ -9,7 +9,7 @@ const cors = require("cors");
 require("./db");
 var indexRouter = require("./routes/index");
 var teacherRouter = require("./routes/teacher");
-var usersRouter = require('./routes/users');
+var usersRouter = require('./routes/stud-route');
 var adminRouter = require("./routes/admin");
 
 var app = express();
@@ -27,10 +27,15 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use('/users', usersRouter);
 app.use("/teacher", teacherRouter);
 app.use("/students", require("./routes/stud-route"));
 app.use("/admin", adminRouter);
+app.use("/quiz", require("./routes/quiz"));
+app.use("/attempt", require("./routes/attempt"));
+app.use("/leaderboard", require("./routes/leaderboard"));
+
+
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
